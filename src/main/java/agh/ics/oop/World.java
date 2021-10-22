@@ -4,9 +4,18 @@ import static java.lang.System.out;
 
 public class World {
     public static void main(String[] args) {
-        out.println("Start");
-        run(enumList(args));
-        out.println("Stop");
+//        out.println("Start");
+//        run(enumList(args));
+//        out.println("Stop");
+//        Vector2D position1 = new Vector2D(1,2);
+//        System.out.println(position1);
+//        Vector2D position2 = new Vector2D(-2,1);
+//        System.out.println(position2);
+//        System.out.println(position1.add(position2));
+        out.println(MoveDirection.NORTH.next());
+        out.println(MoveDirection.EAST.previous());
+        out.println(MoveDirection.SOUTH.toUnitVector());
+        out.println(MoveDirection.WEST);
     }
 
     public static ArrayList<Direction> enumList(String[] args) {
