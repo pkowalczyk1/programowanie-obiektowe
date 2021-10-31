@@ -23,9 +23,9 @@ public class MapDirectionTest {
 
     @Test
     public void toUnitVectorTest() {
-        assertEquals(MapDirection.NORTH.toUnitVector(), new Vector2D(0, 1));
-        assertEquals(MapDirection.EAST.toUnitVector(), new Vector2D(1, 0));
-        assertEquals(MapDirection.SOUTH.toUnitVector(), new Vector2D(0, -1));
-        assertEquals(MapDirection.WEST.toUnitVector(), new Vector2D(-1, 0));
+        assertEquals(MapDirection.NORTH.toUnitVector(), new Vector2d(0, 1));
+        assertEquals(MapDirection.EAST.toUnitVector(), new Vector2d(1, 0));
+        assertEquals(MapDirection.SOUTH.toUnitVector(), new Vector2d(0, -1));
+        assertEquals(MapDirection.WEST.toUnitVector(), new Vector2d(-1, 0));
     }
 }

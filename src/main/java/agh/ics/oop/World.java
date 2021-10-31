@@ -4,22 +4,17 @@ import static java.lang.System.out;
 
 public class World {
     public static void main(String[] args) {
-//        out.println("Start");
-//        run(enumList(args));
-//        out.println("Stop");
-//        Vector2D position1 = new Vector2D(1,2);
-//        System.out.println(position1);
-//        Vector2D position2 = new Vector2D(-2,1);
-//        System.out.println(position2);
-//        System.out.println(position1.add(position2));
-        out.println(MapDirection.NORTH.next());
-        out.println(MapDirection.EAST.previous());
-        out.println(MapDirection.SOUTH.toUnitVector());
-        out.println(MapDirection.WEST);
+        Animal lion = new Animal();
+        OptionsParser parser = new OptionsParser();
+        ArrayList<MoveDirection> steps = parser.parse(args);
+        for (MoveDirection step : steps) {
+            lion.move(step);
+        }
+        out.println(lion);
     }
 
     public static ArrayList<MoveDirection> enumList(String[] args) {
-        ArrayList<MoveDirection> result = new ArrayList<MoveDirection>();
+        ArrayList<MoveDirection> result = new ArrayList<>();
         for (String arg : args) {
             switch(arg) {
                 case "f" -> result.add(MoveDirection.FORWARD);
