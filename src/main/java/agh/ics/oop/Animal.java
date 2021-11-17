@@ -3,9 +3,24 @@ package agh.ics.oop;
 public class Animal {
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position = new Vector2d(2, 2);
+    private IWorldMap map;
+
+    public Animal(IWorldMap map) {
+        this.map = map;
+    }
+
+    public Animal(IWorldMap map, Vector2d initialPosition) {
+        this.position = initialPosition;
+        this.map = map;
+    }
 
     public String toString() {
-         return "Pozycja: " + this.position.toString() + ", orientacja: " + this.orientation.toString();
+         return switch(orientation) {
+             case NORTH -> "N";
+             case SOUTH -> "S";
+             case EAST -> "E";
+             case WEST -> "W";
+         };
     }
 
     public Vector2d getPosition() {
@@ -25,14 +40,14 @@ public class Animal {
             case RIGHT -> this.orientation = this.orientation.next();
             case LEFT -> this.orientation = this.orientation.previous();
             case FORWARD -> {
-                this.position = this.position.add(this.orientation.toUnitVector());
-                if (this.position.x > 4 || this.position.x < 0 || this.position.y > 4 || this.position.y < 0)
-                    this.position = this.position.subtract(this.orientation.toUnitVector());
+                if (map.canMoveTo(position.add(orientation.toUnitVector()))) {
+                    position = position.add(orientation.toUnitVector());
+                }
             }
             case BACKWARD -> {
-                this.position = this.position.subtract(this.orientation.toUnitVector());
-                if (this.position.x > 4 || this.position.x < 0 || this.position.y > 4 || this.position.y < 0)
-                    this.position = this.position.add(this.orientation.toUnitVector());
+                if (map.canMoveTo(position.subtract(orientation.toUnitVector()))) {
+                    position = position.subtract(orientation.toUnitVector());
+                }
             }
         }
     }
