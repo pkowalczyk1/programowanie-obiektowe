@@ -2,7 +2,6 @@ package agh.ics.oop;
 
 import org.junit.jupiter.api.Test;
 import java.util.ArrayList;
-import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -39,7 +38,7 @@ public class MapTest {
         engine.run();
         assertNotEquals(new Vector2d(3, 3), a.getPosition());
     }
-    
+
     @Test
     public void movingTest() {
         IWorldMap map = new RectangularMap(10, 5);
