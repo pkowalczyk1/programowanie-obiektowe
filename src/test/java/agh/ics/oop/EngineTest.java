@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-public class MapTest {
+public class EngineTest {
     @Test
     public void borderTest() {
         IWorldMap map = new RectangularMap(10, 5);

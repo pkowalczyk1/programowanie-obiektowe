@@ -1,6 +1,6 @@
 package agh.ics.oop;
-import static java.lang.Math.max;
-import static java.lang.Math.min;
+
+import static java.lang.Math.*;
 
 class Vector2d {
     final public int x;

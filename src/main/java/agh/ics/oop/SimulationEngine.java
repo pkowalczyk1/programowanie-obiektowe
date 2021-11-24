@@ -22,12 +22,12 @@ public class SimulationEngine implements IEngine{
     @Override
     public void run() {
         int animalInd = 0;
-//        System.out.println(map);
+        System.out.println(map);
         for (MoveDirection move : moves) {
             animals.get(animalInd).move(move);
             animalInd += 1;
             animalInd %= animals.size();
-//            System.out.println(map);
+            System.out.println(map);
         }
     }
 }
