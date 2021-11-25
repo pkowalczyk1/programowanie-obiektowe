@@ -1,12 +1,13 @@
 package agh.ics.oop;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class SimulationEngine implements IEngine{
     private ArrayList<MoveDirection> moves;
     private IWorldMap map;
-    private List<Animal> animals = new ArrayList<>();
+    private Map<Vector2d, Animal> animals = new LinkedHashMap<>();
 
     public SimulationEngine(ArrayList<MoveDirection> moves, IWorldMap map, Vector2d[] initialPositions) {
         this.moves = moves;
@@ -14,20 +15,24 @@ public class SimulationEngine implements IEngine{
         for (Vector2d position : initialPositions) {
             Animal a = new Animal(map, position);
             if (map.place(a)) {
-                animals.add(a);
+                animals.put(position, a);
             }
         }
     }
 
     @Override
     public void run() {
-        int animalInd = 0;
+        int moveInd = 0;
         System.out.println(map);
-        for (MoveDirection move : moves) {
-            animals.get(animalInd).move(move);
-            animalInd += 1;
-            animalInd %= animals.size();
-            System.out.println(map);
+        while (moveInd < this.moves.size()){
+            for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
+                entry.getValue().move(this.moves.get(moveInd));
+                moveInd++;
+                if (moveInd >= this.moves.size()) {
+                    break;
+                }
+                System.out.println(map);
+            }
         }
     }
 }

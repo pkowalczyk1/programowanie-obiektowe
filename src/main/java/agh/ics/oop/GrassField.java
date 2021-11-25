@@ -1,10 +1,11 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
 import java.lang.Math;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class GrassField extends AbstractWorldMap {
-    private ArrayList<Grass> fields = new ArrayList<>();
+    private Map<Vector2d, Grass> fields = new LinkedHashMap<>();
 
     public GrassField(int numberOfFields) {
         for (int i=0; i<numberOfFields; i++) {
@@ -14,27 +15,24 @@ public class GrassField extends AbstractWorldMap {
                 x = (int) (Math.random() * Math.sqrt(10 * numberOfFields));
                 y = (int) (Math.random() * Math.sqrt(10 * numberOfFields));
                 added = true;
-                for (Grass field : this.fields) {
-                    if (field.getPosition().equals(new Vector2d(x, y))) {
-                        added = false;
-                        break;
-                    }
+                if (this.fields.get(new Vector2d(x, y)) != null) {
+                    added = false;
                 }
             }
 
             Grass newField = new Grass(new Vector2d(x, y));
-            this.fields.add(newField);
+            this.fields.put(new Vector2d(x, y), newField);
         }
     }
 
     public Vector2d findRightUpper() {
         Vector2d rightUp = new Vector2d((int) (-2 * Math.pow(10, 9)), (int) (-2 * Math.pow(10, 9)));
-        for (Animal animal : this.animals) {
-            rightUp = rightUp.upperRight(animal.getPosition());
+        for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
+            rightUp = rightUp.upperRight(entry.getKey());
         }
 
-        for (Grass field : this.fields) {
-            rightUp = rightUp.upperRight(field.getPosition());
+        for (Map.Entry<Vector2d, Grass> entry : this.fields.entrySet()) {
+            rightUp = rightUp.upperRight(entry.getKey());
         }
 
         return rightUp;
@@ -42,12 +40,12 @@ public class GrassField extends AbstractWorldMap {
 
     public Vector2d findLeftLower() {
         Vector2d leftLow = new Vector2d((int) (2 * Math.pow(10, 9)), (int) (2 * Math.pow(10, 9)));
-        for (Animal animal : this.animals) {
-            leftLow = leftLow.lowerLeft(animal.getPosition());
+        for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
+            leftLow = leftLow.lowerLeft(entry.getKey());
         }
 
-        for (Grass field : this.fields) {
-            leftLow = leftLow.lowerLeft(field.getPosition());
+        for (Map.Entry<Vector2d, Grass> entry : this.fields.entrySet()) {
+            leftLow = leftLow.lowerLeft(entry.getKey());
         }
 
         return leftLow;
@@ -59,13 +57,7 @@ public class GrassField extends AbstractWorldMap {
             return true;
         }
 
-        for (Grass field : this.fields) {
-            if (field.getPosition().equals(position)) {
-                return true;
-            }
-        }
-
-        return false;
+        return this.fields.get(position) != null;
     }
 
     @Override
@@ -76,10 +68,6 @@ public class GrassField extends AbstractWorldMap {
             return x;
         }
 
-        for (Grass field : this.fields) {
-            if (field.getPosition().equals(position)) return field;
-        }
-
-        return null;
+        return this.fields.get(position);
     }
 }

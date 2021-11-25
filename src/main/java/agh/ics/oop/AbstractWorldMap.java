@@ -1,9 +1,10 @@
 package agh.ics.oop;
 
-import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
-abstract class AbstractWorldMap implements IWorldMap {
-    protected ArrayList<Animal> animals = new ArrayList<>();
+abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+    protected Map<Vector2d, Animal> animals = new LinkedHashMap<>();
 
     abstract Vector2d findRightUpper();
     abstract Vector2d findLeftLower();
@@ -15,16 +16,13 @@ abstract class AbstractWorldMap implements IWorldMap {
 
     public boolean canMoveTo(Vector2d position) {
         Object object = objectAt(position);
-        if (object instanceof Animal) {
-            return false;
-        }
-
-        return true;
+        return !(object instanceof Animal);
     }
 
     public boolean place(Animal animal) {
         if (canMoveTo(animal.getPosition())) {
-            this.animals.add(animal);
+            this.animals.put(animal.getPosition(), animal);
+            animal.addObserver(this);
             return true;
         }
 
@@ -32,18 +30,16 @@ abstract class AbstractWorldMap implements IWorldMap {
     }
 
     public boolean isOccupied(Vector2d position) {
-        for (Animal animal : this.animals) {
-            if (animal.isAt(position)) return true;
-        }
-
-        return false;
+        return animals.get(position) != null;
     }
 
     public Object objectAt(Vector2d position) {
-        for (Animal animal : this.animals) {
-            if (animal.isAt(position)) return animal;
-        }
+        return animals.get(position);
+    }
 
-        return null;
+    public void positionChanged(Vector2d oldPosition, Vector2d newPosition) {
+        Animal moved = this.animals.get(oldPosition);
+        this.animals.remove(oldPosition, moved);
+        this.animals.put(newPosition, moved);
     }
 }
