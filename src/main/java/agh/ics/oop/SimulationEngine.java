@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-public class SimulationEngine implements IEngine{
+public class SimulationEngine implements IEngine, Runnable{
     private ArrayList<MoveDirection> moves;
     private IWorldMap map;
     private Map<Vector2d, Animal> animals = new LinkedHashMap<>();
@@ -27,6 +27,11 @@ public class SimulationEngine implements IEngine{
         while (moveInd < this.moves.size()){
             for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
                 entry.getValue().move(this.moves.get(moveInd));
+                try {
+                    Thread.sleep(400);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 moveInd++;
                 if (moveInd >= this.moves.size()) {
                     break;

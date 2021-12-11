@@ -4,8 +4,12 @@ import java.lang.Math;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class GrassField extends AbstractWorldMap {
     private Map<Vector2d, Grass> fields = new LinkedHashMap<>();
+    private MapBoundary boundary = new MapBoundary();
 
     public GrassField(int numberOfFields) {
         for (int i=0; i<numberOfFields; i++) {
@@ -22,33 +26,21 @@ public class GrassField extends AbstractWorldMap {
 
             Grass newField = new Grass(new Vector2d(x, y));
             this.fields.put(new Vector2d(x, y), newField);
+            boundary.grassOrderedByX.add(newField.getPosition());
+            boundary.grassOrderedByY.add(newField.getPosition());
         }
     }
 
     public Vector2d findRightUpper() {
-        Vector2d rightUp = new Vector2d((int) (-2 * Math.pow(10, 9)), (int) (-2 * Math.pow(10, 9)));
-        for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
-            rightUp = rightUp.upperRight(entry.getKey());
-        }
-
-        for (Map.Entry<Vector2d, Grass> entry : this.fields.entrySet()) {
-            rightUp = rightUp.upperRight(entry.getKey());
-        }
-
-        return rightUp;
+        int x = max(boundary.animalsOrderedByX.last().x, boundary.grassOrderedByX.last().x);
+        int y = max(boundary.animalsOrderedByY.last().y, boundary.grassOrderedByY.last().y);
+        return new Vector2d(x, y);
     }
 
     public Vector2d findLeftLower() {
-        Vector2d leftLow = new Vector2d((int) (2 * Math.pow(10, 9)), (int) (2 * Math.pow(10, 9)));
-        for (Map.Entry<Vector2d, Animal> entry : this.animals.entrySet()) {
-            leftLow = leftLow.lowerLeft(entry.getKey());
-        }
-
-        for (Map.Entry<Vector2d, Grass> entry : this.fields.entrySet()) {
-            leftLow = leftLow.lowerLeft(entry.getKey());
-        }
-
-        return leftLow;
+        int x = min(boundary.animalsOrderedByX.first().x, boundary.grassOrderedByX.first().x);
+        int y = min(boundary.animalsOrderedByY.first().y, boundary.grassOrderedByY.first().y);
+        return new Vector2d(x, y);
     }
 
     @Override
@@ -69,5 +61,14 @@ public class GrassField extends AbstractWorldMap {
         }
 
         return this.fields.get(position);
+    }
+
+    @Override
+    public boolean place(Animal animal) {
+        super.place(animal);
+        animal.addObserver(boundary);
+        boundary.animalsOrderedByX.add(animal.getPosition());
+        boundary.animalsOrderedByY.add(animal.getPosition());
+        return true;
     }
 }

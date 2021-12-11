@@ -3,11 +3,11 @@ package agh.ics.oop;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
+abstract public class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
     protected Map<Vector2d, Animal> animals = new LinkedHashMap<>();
 
-    abstract Vector2d findRightUpper();
-    abstract Vector2d findLeftLower();
+    abstract public Vector2d findRightUpper();
+    abstract public Vector2d findLeftLower();
 
     public String toString() {
         MapVisualizer visualizer = new MapVisualizer(this);
@@ -19,14 +19,14 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         return !(object instanceof Animal);
     }
 
-    public boolean place(Animal animal) {
+    public boolean place(Animal animal) throws IllegalArgumentException {
         if (canMoveTo(animal.getPosition())) {
             this.animals.put(animal.getPosition(), animal);
             animal.addObserver(this);
             return true;
         }
 
-        return false;
+        throw new IllegalArgumentException("Cannot place animal on position " + animal.getPosition());
     }
 
     public boolean isOccupied(Vector2d position) {
@@ -41,5 +41,9 @@ abstract class AbstractWorldMap implements IWorldMap, IPositionChangeObserver {
         Animal moved = this.animals.get(oldPosition);
         this.animals.remove(oldPosition, moved);
         this.animals.put(newPosition, moved);
+    }
+
+    public Map<Vector2d, Animal> getAnimals() {
+        return this.animals;
     }
 }

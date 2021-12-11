@@ -4,7 +4,7 @@ import java.util.Objects;
 
 import static java.lang.Math.*;
 
-class Vector2d {
+public class Vector2d {
     final public int x;
     final public int y;
     public Vector2d(int x, int y) {

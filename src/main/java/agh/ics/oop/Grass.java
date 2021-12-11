@@ -1,6 +1,6 @@
 package agh.ics.oop;
 
-public class Grass {
+public class Grass implements IWorldMapElement{
     private Vector2d position;
 
     public Grass(Vector2d position) {
@@ -13,5 +13,9 @@ public class Grass {
 
     public String toString() {
         return "*";
+    }
+
+    public String getPath() {
+        return "src\\main\\resources\\grass.png";
     }
 }

@@ -1,13 +1,15 @@
 package agh.ics.oop;
 
-import java.util.HashSet;
-import java.util.Set;
+import agh.ics.oop.gui.App;
 
-public class Animal {
+import java.util.ArrayList;
+import java.util.List;
+
+public class Animal implements IWorldMapElement {
     private MapDirection orientation = MapDirection.NORTH;
     private Vector2d position = new Vector2d(2, 2);
     private IWorldMap map;
-    private Set<IPositionChangeObserver> observers = new HashSet<>();
+    private List<IPositionChangeObserver> observers = new ArrayList<>();
 
     public Animal(IWorldMap map) {
         this.map = map;
@@ -41,8 +43,14 @@ public class Animal {
 
     public void move(MoveDirection direction) {
         switch (direction) {
-            case RIGHT -> this.orientation = this.orientation.next();
-            case LEFT -> this.orientation = this.orientation.previous();
+            case RIGHT -> {
+                this.orientation = this.orientation.next();
+                positionChanged(this.position, this.position);
+            }
+            case LEFT -> {
+                this.orientation = this.orientation.previous();
+                positionChanged(this.position, this.position);
+            }
             case FORWARD -> {
                 Vector2d oldPosition = this.position;
                 if (map.canMoveTo(position.add(orientation.toUnitVector()))) {
@@ -72,5 +80,14 @@ public class Animal {
         for (IPositionChangeObserver observer : this.observers) {
             observer.positionChanged(oldPosition, newPosition);
         }
+    }
+
+    public String getPath() {
+        return switch (orientation) {
+            case NORTH -> "src\\main\\resources\\up.png";
+            case EAST -> "src\\main\\resources\\right.png";
+            case WEST -> "src\\main\\resources\\left.png";
+            case SOUTH -> "src\\main\\resources\\down.png";
+        };
     }
 }
